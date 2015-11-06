@@ -1,0 +1,100 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>docker-message-broker</artifactId>
+    <groupId>com.consol.docker</groupId>
+    <version>0.1</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <groupId>com.consol.docker</groupId>
+  <artifactId>docker-activemq</artifactId>
+  <name>docker-activemq</name>
+  <packaging>pom</packaging>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jolokia</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <configuration>
+          <logDate>default</logDate>
+          <verbose>true</verbose>
+          <images>
+            <image>
+              <alias>apache-activemq-5.12</alias>
+              <name>consol/activemq-5.12</name>
+              <build>
+                <tags>
+                  <tag>latest</tag>
+                </tags>
+                <assembly>
+                  <dockerFileDir>5.12</dockerFileDir>
+                </assembly>
+              </build>
+              <run>
+                <namingStrategy>alias</namingStrategy>
+                <ports>
+                  <port>${application.host}:61616:61616</port>
+                  <port>${application.host}:8161:8161</port>
+                </ports>
+                <wait>
+                  <!-- The plugin waits until this URL is reachable via HTTP ... -->
+                  <log>Server startup</log>
+                  <http>
+                    <url>http://${application.host}:8161</url>
+                    <method>GET</method>
+                    <status>200</status>
+                  </http>
+                  <time>60000</time>
+                  <shutdown>500</shutdown>
+                </wait>
+                <log>
+                  <enabled>true</enabled>
+                  <color>red</color>
+                </log>
+              </run>
+            </image>
+            <image>
+              <alias>apache-activemq-5.11</alias>
+              <name>consol/activemq-5.11</name>
+              <build>
+                <tags>
+                  <tag>latest</tag>
+                </tags>
+                <assembly>
+                  <dockerFileDir>5.11</dockerFileDir>
+                </assembly>
+              </build>
+              <run>
+                <namingStrategy>alias</namingStrategy>
+                <ports>
+                  <port>${application.host}:61616:61616</port>
+                  <port>${application.host}:8161:8161</port>
+                </ports>
+                <wait>
+                  <!-- The plugin waits until this URL is reachable via HTTP ... -->
+                  <log>Server startup</log>
+                  <http>
+                    <url>http://${application.host}:8161</url>
+                    <method>GET</method>
+                    <status>200</status>
+                  </http>
+                  <time>60000</time>
+                  <shutdown>500</shutdown>
+                </wait>
+                <log>
+                  <enabled>true</enabled>
+                  <color>red</color>
+                </log>
+              </run>
+            </image>
+          </images>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
